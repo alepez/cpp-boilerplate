@@ -127,11 +127,14 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 $(TEST_EXE): $(TEST_OBJS) $(CXX_OBJS)
 	$(CXX) -o $@ $(CXX_OBJS) $(TEST_OBJS) -lgtest -lgtest_main -lpthread $(LDFLAGS)
 
+test_gdb: $(TEST_EXE)
+	@./test/scripts/all_gdb
+
 test: $(TEST_EXE)
-	./test/scripts/all
+	@./test/scripts/all
 
 memcheck: $(TEST_EXE)
-	./test/scripts/all_memcheck
+	@./test/scripts/all_memcheck
 
 coverage: test
 	@lcov -b . --capture --directory . --output-file build/coverage.info
@@ -145,7 +148,7 @@ coverage: test
 all: libraries $(TEST_EXE)
 
 clean:
-	rm -rf build
+	rm -rf $(BUILD_DIR)
 
 distclean: clean
-	rm -rf dist
+	rm -rf $(DIST_DIR)
