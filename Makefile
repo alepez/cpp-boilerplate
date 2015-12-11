@@ -39,7 +39,7 @@ HEADERS_DIST := $(addprefix $(HEADERS_DIST_DIR)/, $(patsubst $(SRC_DIR)/%,%,$(HE
 DEFINES +=
 
 ## INCLUDES
-INCLUDE_DIRS += $(SRC_DIR)
+INCLUDE_DIRS +=
 
 ## LIBRARIES
 LIBRARIES +=
@@ -86,15 +86,14 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 	$(CXX) $(CXXFLAGS) -MF$(@:%.o=%.d) -MG -MM -MP -MT$(@:%.o=%.d) -MT$@ $<
 
-$(LIB_DIST_DIR):
-	@mkdir -p $@
-
 ## build shared library
-$(LIB_SHARED): $(LIB_DIST_DIR) $(CXX_OBJS)
+$(LIB_SHARED): $(CXX_OBJS)
+	@mkdir -p $(LIB_DIST_DIR)
 	$(CXX) -shared -o $@ $(CXX_OBJS) $(LDFLAGS)
 
 ## build static library
-$(LIB_STATIC): $(LIB_DIST_DIR)  $(CXX_OBJS)
+$(LIB_STATIC): $(CXX_OBJS)
+	@mkdir -p $(LIB_DIST_DIR)
 	ar rcs $@ $(CXX_OBJS)
 
 libraries: $(LIB_STATIC) $(LIB_SHARED)
@@ -121,8 +120,8 @@ TEST_EXE := $(TEST_BUILD_DIR)/$(PROJECT)_test
 
 $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -I$(SRC_DIR) -c -o $@ $<
-	$(CXX) $(CXXFLAGS) -I$(SRC_DIR) -MF$(@:%.o=%.d) -MG -MM -MP -MT$(@:%.o=%.d) -MT$@ $<
+	$(CXX) $(CXXFLAGS) -I$(DIST_DIR)/include -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -I$(DIST_DIR)/include -MF$(@:%.o=%.d) -MG -MM -MP -MT$(@:%.o=%.d) -MT$@ $<
 
 $(TEST_EXE): $(TEST_OBJS) $(CXX_OBJS)
 	$(CXX) -o $@ $(CXX_OBJS) $(TEST_OBJS) -lgtest -lgtest_main -lpthread $(LDFLAGS)
