@@ -3,4 +3,4 @@
 source "$( dirname "${BASH_SOURCE[0]}" )/common.inc.sh"
 
 cd "${TEST_ENV_DIR}"
-gdb -ex=r "${TEST_EXE}" --args $@
+gdb -ex=r --args "${TEST_EXE}" $@
