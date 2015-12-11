@@ -123,7 +123,7 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -I$(DIST_DIR)/include -c -o $@ $<
 	$(CXX) $(CXXFLAGS) -I$(DIST_DIR)/include -MF$(@:%.o=%.d) -MG -MM -MP -MT$(@:%.o=%.d) -MT$@ $<
 
-$(TEST_EXE): $(TEST_OBJS) $(CXX_OBJS)
+$(TEST_EXE): dist $(TEST_OBJS)
 	$(CXX) -o $@ $(CXX_OBJS) $(TEST_OBJS) -lgtest -lgtest_main -lpthread $(LDFLAGS)
 
 test_gdb: $(TEST_EXE)
