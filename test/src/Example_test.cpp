@@ -1,4 +1,4 @@
-#include "../../src/Example.h" // FIXME
+#include <__PROJECT__/Example.h>
 
 #include <gtest/gtest.h>
 
